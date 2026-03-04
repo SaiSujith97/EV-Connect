@@ -1,0 +1,43 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ecfdf5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d1fae5;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg3)"/>
+  
+  <!-- Installation Base -->
+  <rect x="250" y="450" width="300" height="20" rx="5" fill="#6b7280" opacity="0.5"/>
+  
+  <!-- Dual Charger Setup -->
+  <rect x="280" y="200" width="100" height="250" rx="12" fill="#059669"/>
+  <rect x="420" y="200" width="100" height="250" rx="12" fill="#0891b2"/>
+  
+  <!-- Left Charger Details -->
+  <rect x="290" y="220" width="80" height="50" rx="5" fill="#34d399"/>
+  <text x="330" y="250" font-family="Arial, sans-serif" font-size="16" fill="#064e3b" text-anchor="middle" font-weight="bold">AC</text>
+  
+  <!-- Right Charger Details -->
+  <rect x="430" y="220" width="80" height="50" rx="5" fill="#67e8f9"/>
+  <text x="470" y="250" font-family="Arial, sans-serif" font-size="16" fill="#164e63" text-anchor="middle" font-weight="bold">DC</text>
+  
+  <!-- Connectors -->
+  <circle cx="330" cy="400" r="25" fill="#10b981"/>
+  <path d="M 325,393 L 330,405 L 325,410 L 335,410 L 330,405 L 335,393 Z" fill="#fbbf24"/>
+  
+  <circle cx="470" cy="400" r="25" fill="#06b6d4"/>
+  <path d="M 465,393 L 470,405 L 465,410 L 475,410 L 470,405 L 475,393 Z" fill="#f59e0b"/>
+  
+  <!-- Status Lights -->
+  <circle cx="320" cy="180" r="8" fill="#34d399">
+    <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="480" cy="180" r="8" fill="#22d3ee">
+    <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Text -->
+  <text x="400" y="520" font-family="Arial, sans-serif" font-size="24" fill="#059669" text-anchor="middle" font-weight="bold">Dual Charging Station</text>
+  <text x="400" y="550" font-family="Arial, sans-serif" font-size="16" fill="#6b7280" text-anchor="middle">AC 22kW • DC 50kW</text>
+</svg>

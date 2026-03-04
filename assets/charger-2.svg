@@ -1,0 +1,41 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#dbeafe;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#bfdbfe;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg2)"/>
+  
+  <!-- Ground -->
+  <rect x="0" y="450" width="800" height="150" fill="#93c5fd" opacity="0.3"/>
+  
+  <!-- Modern Charging Station -->
+  <rect x="320" y="180" width="160" height="280" rx="15" fill="#3b82f6"/>
+  <rect x="330" y="190" width="140" height="100" rx="8" fill="#2563eb"/>
+  
+  <!-- Display Panel -->
+  <rect x="345" y="210" width="110" height="60" rx="5" fill="#e0f2fe"/>
+  <text x="400" y="240" font-family="Arial, sans-serif" font-size="18" fill="#3b82f6" text-anchor="middle" font-weight="bold">READY</text>
+  
+  <!-- LED Indicators -->
+  <circle cx="365" cy="320" r="6" fill="#34d399"/>
+  <circle cx="385" cy="320" r="6" fill="#34d399"/>
+  <circle cx="405" cy="320" r="6" fill="#60a5fa"/>
+  <circle cx="425" cy="320" r="6" fill="#9ca3af"/>
+  
+  <!-- Cable Holder -->
+  <rect x="340" y="360" width="120" height="80" rx="10" fill="#1e3a8a"/>
+  <ellipse cx="400" cy="400" rx="30" ry="35" fill="#2563eb"/>
+  
+  <!-- Connector -->
+  <rect x="385" y="390" width="30" height="25" rx="5" fill="#10b981"/>
+  <rect x="390" y="400" width="20" height="8" rx="2" fill="#fbbf24"/>
+  
+  <!-- Shadow -->
+  <ellipse cx="400" cy="470" rx="80" ry="15" fill="#1e3a8a" opacity="0.2"/>
+  
+  <!-- Text -->
+  <text x="400" y="530" font-family="Arial, sans-serif" font-size="22" fill="#2563eb" text-anchor="middle" font-weight="bold">EcoCharge Premium</text>
+  <text x="400" y="560" font-family="Arial, sans-serif" font-size="16" fill="#6b7280" text-anchor="middle">DC Fast Charging • 75 kW</text>
+</svg>
