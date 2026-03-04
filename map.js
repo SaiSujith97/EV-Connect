@@ -77,19 +77,15 @@ function smoothZoom(callback) {
 
 // Zoom toward viewport center (for button-triggered zooms)
 function zoomFromCenter(newZoom) {
-  const container = mapCanvas ? mapCanvas.parentElement : null;
-  if (!container) return;
-
-  const rect = container.getBoundingClientRect();
-  const centerX = rect.width / 2;
-  const centerY = rect.height / 2;
-
   const oldZoom = mapState.zoom;
   mapState.zoom = newZoom;
 
   const zoomRatio = mapState.zoom / oldZoom;
-  mapState.translateX = centerX - (centerX - mapState.translateX) * zoomRatio;
-  mapState.translateY = centerY - (centerY - mapState.translateY) * zoomRatio;
+
+  // Since transform-origin is 50% 50% (center of the canvas/screen),
+  // we just need to scale the translation to keep the center fixed.
+  mapState.translateX = mapState.translateX * zoomRatio;
+  mapState.translateY = mapState.translateY * zoomRatio;
 }
 
 function zoomIn() {
@@ -123,22 +119,39 @@ function resetZoom() {
 // Update map transform – NO boundaries, infinite movement
 function updateMapTransform() {
   if (!mapCanvas) return;
-  mapCanvas.style.transform = `translate(${mapState.translateX}px, ${mapState.translateY}px) scale(${mapState.zoom})`;
+  // Use translate3d to force hardware acceleration on the GPU, avoiding pixel repaints and jitters
+  mapCanvas.style.transform = `translate3d(${mapState.translateX}px, ${mapState.translateY}px, 0) scale(${mapState.zoom})`;
 }
 
 // ============================================================
 // Dynamic Charger Generation
 // ============================================================
+let dynamicChargerTimeout = null;
+
 function onZoomChanged() {
   const currentZoom = mapState.zoom;
 
-  // When zooming out (more area visible), generate additional chargers
+  // Debounce the map charger generation so it does not block the main UI thread during zoom animations
+  if (dynamicChargerTimeout) clearTimeout(dynamicChargerTimeout);
+
   if (currentZoom < 0.8) {
-    generateDynamicChargers(currentZoom);
+    dynamicChargerTimeout = setTimeout(() => {
+      requestAnimationFrame(() => {
+        generateDynamicChargers(currentZoom);
+      });
+    }, 300); // Wait for zoom transition to calm down
   }
 
   // Show/hide dynamic chargers based on zoom level
   updateDynamicChargerVisibility(currentZoom);
+
+  // Inverse scale current location to make it look bigger when zoomed out
+  const currentLocation = document.querySelector('.current-location');
+  if (currentLocation) {
+    // scale up inversely, capping it so it doesn't get too small when zoomed in
+    const invScale = Math.max(1, 1 / currentZoom);
+    currentLocation.style.transform = `translate(-50%, -50%) scale(${invScale})`;
+  }
 
   mapState.lastZoom = currentZoom;
 }
@@ -410,10 +423,16 @@ function handleWheel(e) {
   const rect = mapCanvas.parentElement.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+
+  // Distance from center of container (which aligns with transform-origin 50% 50%)
+  const dx = mouseX - centerX;
+  const dy = mouseY - centerY;
 
   const zoomRatio = mapState.zoom / oldZoom;
-  mapState.translateX = mouseX - (mouseX - mapState.translateX) * zoomRatio;
-  mapState.translateY = mouseY - (mouseY - mapState.translateY) * zoomRatio;
+  mapState.translateX = dx - (dx - mapState.translateX) * zoomRatio;
+  mapState.translateY = dy - (dy - mapState.translateY) * zoomRatio;
 
   // Use requestAnimationFrame for smooth rendering
   if (wheelRAF) cancelAnimationFrame(wheelRAF);
@@ -461,9 +480,15 @@ function handleTouchMove(e) {
       const rect = mapCanvas.parentElement.getBoundingClientRect();
       const mx = centerX - rect.left;
       const my = centerY - rect.top;
+
+      const screenCenterX = rect.width / 2;
+      const screenCenterY = rect.height / 2;
+      const dx = mx - screenCenterX;
+      const dy = my - screenCenterY;
+
       const zoomRatio = mapState.zoom / oldZoom;
-      mapState.translateX = mx - (mx - mapState.translateX) * zoomRatio;
-      mapState.translateY = my - (my - mapState.translateY) * zoomRatio;
+      mapState.translateX = dx - (dx - mapState.translateX) * zoomRatio;
+      mapState.translateY = dy - (dy - mapState.translateY) * zoomRatio;
 
       onZoomChanged();
       updateMapTransform();

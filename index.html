@@ -623,9 +623,18 @@
                     <label class="payment-option">
                         <input type="radio" name="payment" value="upi" checked>
                         <div class="option-card">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                                <line x1="1" y1="10" x2="23" y2="10"></line>
+                            <svg viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M428.3 120.4L294 254.7c-21 21-55.1 21-76.1 0L83.7 120.4M312 360h-112c-26.5 0-48-21.5-48-48V200c0-26.5 21.5-48 48-48h112c26.5 0 48 21.5 48 48v112c0 26.5-21.5 48-48 48z"
+                                    stroke="none" fill="var(--primary)" opacity="0.1" />
+                                <path d="M124.6 156.4L238.9 270.7c9.4 9.4 24.6 9.4 33.9 0l114.3-114.3"
+                                    stroke="var(--primary)" stroke-width="32" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path
+                                    d="M312 360h-112c-26.5 0-48-21.5-48-48V200c0-26.5 21.5-48 48-48h112c26.5 0 48 21.5 48 48v112c0 26.5-21.5 48-48 48z"
+                                    stroke="var(--primary)" stroke-width="32" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <circle cx="256" cy="270" r="20" fill="var(--primary)" stroke="none" />
                             </svg>
                             <span>UPI</span>
                         </div>
@@ -634,8 +643,12 @@
                         <input type="radio" name="payment" value="card">
                         <div class="option-card">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                                <line x1="1" y1="10" x2="23" y2="10"></line>
+                                <rect x="2" y="5" width="20" height="14" rx="2" ry="2" stroke="var(--secondary)"></rect>
+                                <line x1="2" y1="10" x2="22" y2="10" stroke="var(--secondary)"></line>
+                                <circle cx="16" cy="15" r="2" fill="var(--secondary)" stroke="none" opacity="0.8">
+                                </circle>
+                                <circle cx="19" cy="15" r="2" fill="var(--warning)" stroke="none" opacity="0.8">
+                                </circle>
                             </svg>
                             <span>Card</span>
                         </div>
@@ -644,9 +657,10 @@
                         <input type="radio" name="payment" value="wallet">
                         <div class="option-card">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
-                                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
-                                <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path>
+                                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" stroke="var(--success)"></path>
+                                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" stroke="var(--success)"></path>
+                                <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" stroke="var(--success)" fill="var(--success)">
+                                </path>
                             </svg>
                             <span>Wallet (₹500)</span>
                         </div>
