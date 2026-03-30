@@ -11,6 +11,9 @@ let mapState = {
   isDragging: false,
   startX: 0,
   startY: 0,
+  initialX: 0,
+  initialY: 0,
+  isActuallyDragging: false,
   minZoom: 0.15,
   maxZoom: 3,
   lastZoom: 1
@@ -357,12 +360,16 @@ function handleDragStart(e) {
   if (!mapCanvas) return;
 
   mapState.isDragging = true;
-  mapCanvas.classList.add('dragging');
+  mapState.isActuallyDragging = false;
 
   if (e.type === 'mousedown') {
+    mapState.initialX = e.clientX;
+    mapState.initialY = e.clientY;
     mapState.startX = e.clientX - mapState.translateX;
     mapState.startY = e.clientY - mapState.translateY;
   } else if (e.type === 'touchstart') {
+    mapState.initialX = e.touches[0].clientX;
+    mapState.initialY = e.touches[0].clientY;
     mapState.startX = e.touches[0].clientX - mapState.translateX;
     mapState.startY = e.touches[0].clientY - mapState.translateY;
   }
@@ -370,7 +377,6 @@ function handleDragStart(e) {
 
 function handleDragMove(e) {
   if (!mapState.isDragging || !mapCanvas) return;
-  e.preventDefault();
 
   let clientX, clientY;
   if (e.type === 'mousemove') {
@@ -380,6 +386,20 @@ function handleDragMove(e) {
     clientX = e.touches[0].clientX;
     clientY = e.touches[0].clientY;
   }
+
+  // Handle drag threshold
+  if (!mapState.isActuallyDragging) {
+    const dx = clientX - mapState.initialX;
+    const dy = clientY - mapState.initialY;
+    if (Math.sqrt(dx*dx + dy*dy) > 5) {
+      mapState.isActuallyDragging = true;
+      mapCanvas.classList.add('dragging');
+    } else {
+      return;
+    }
+  }
+
+  e.preventDefault();
 
   // INFINITE PANNING – no boundaries at all!
   mapState.translateX = clientX - mapState.startX;
@@ -459,6 +479,7 @@ function handleTouchStart(e) {
     // Pinch gesture start
     lastTouchDistance = getTouchDistance(e.touches);
     mapState.isDragging = false;
+    mapState.isActuallyDragging = false;
     mapCanvas.classList.remove('dragging');
   } else if (e.touches.length === 1) {
     handleDragStart(e);
