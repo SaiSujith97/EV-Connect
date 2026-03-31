@@ -295,6 +295,80 @@ function updateNavTransform() {
   }
 }
 
+function setupNavInteractivity() {
+  const container = document.getElementById("nav-map-container");
+  if (!container) return;
+
+  container.addEventListener('mousedown', (e) => {
+    if (e.target.closest('.zoom-btn')) return;
+    navMapState.isDragging = true;
+    navMapState.startDragX = e.clientX - navMapState.translateX;
+    navMapState.startDragY = e.clientY - navMapState.translateY;
+    document.getElementById("nav-map-canvas").style.cursor = 'grabbing';
+  });
+
+  container.addEventListener('touchstart', (e) => {
+    if (e.target.closest('.zoom-btn') || e.touches.length > 1) return;
+    navMapState.isDragging = true;
+    navMapState.startDragX = e.touches[0].clientX - navMapState.translateX;
+    navMapState.startDragY = e.touches[0].clientY - navMapState.translateY;
+  }, { passive: false });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!navMapState.isDragging) return;
+    e.preventDefault();
+    navMapState.translateX = e.clientX - navMapState.startDragX;
+    navMapState.translateY = e.clientY - navMapState.startDragY;
+    updateNavTransform();
+  });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!navMapState.isDragging || e.touches.length > 1) return;
+    navMapState.translateX = e.touches[0].clientX - navMapState.startDragX;
+    navMapState.translateY = e.touches[0].clientY - navMapState.startDragY;
+    updateNavTransform();
+  }, { passive: false });
+
+  document.addEventListener('mouseup', () => {
+    if (navMapState.isDragging) {
+      navMapState.isDragging = false;
+      const c = document.getElementById("nav-map-canvas");
+      if(c) c.style.cursor = 'grab';
+    }
+  });
+
+  document.addEventListener('touchend', () => {
+    navMapState.isDragging = false;
+  });
+
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const oldZoom = navMapState.zoom;
+    if (e.deltaY < 0) {
+      navMapState.zoom = Math.min(navMapState.zoom * 1.08, navMapState.maxZoom);
+    } else {
+      navMapState.zoom = Math.max(navMapState.zoom / 1.08, navMapState.minZoom);
+    }
+    
+    const rect = container.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const dx = mouseX - centerX;
+    const dy = mouseY - centerY;
+    
+    const zoomRatio = navMapState.zoom / oldZoom;
+    navMapState.translateX = dx - (dx - navMapState.translateX) * zoomRatio;
+    navMapState.translateY = dy - (dy - navMapState.translateY) * zoomRatio;
+    updateNavTransform();
+  }, { passive: false });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  setupNavInteractivity();
+});
+
 function startNavigation(bookingId) {
   const b = userBookings.find((x) => x.id === bookingId);
   if (!b) return;

@@ -3035,6 +3035,9 @@ img {
     top: calc(50% - 3000px);
     left: calc(50% - 3000px);
     transform-origin: 50% 50%;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
 }
 
 [data-theme="dark"] .nav-map-canvas {
